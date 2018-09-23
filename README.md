@@ -3,19 +3,21 @@ An extended cache  library.
 
 # Feature
  1. 满足最基本的缓存需求，读取（get）和保存（set）
- 2. 支持针对缓存进行逻辑代理
+ 2. 支持针对缓存进行逻辑代理
  3. 灵活可配置的数据存储方式
 
-# 基本的读写
+# TODO 基本的读写
 
-# 针对缓存进行逻辑代理
+# TODO 针对缓存进行逻辑代理
 
-TODO 这里描述怎么使用
-1. 新增 adapter，强制更新，以及在获取之前进行逻辑处理以及覆盖全局 options
-2. 获取参数的时候，忽略缓存，强制更新
+1. 新增 adapter，强制更新，以及在获取之前进行逻辑处理以及覆盖全局 options
+2. 获取参数的时候忽略缓存强制更新
 
-# 配置存储方式
-这里可以使用 @beautywe/wxapp-storage
+# TODO 配置存储方式
+
+1. 使用 @beautywe/wxapp-storage
+2. 使用内存
+3. 自定义
 
 # API
 TODO 你也可以查看网页版：[API Doc]()
