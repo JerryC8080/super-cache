@@ -1,0 +1,44 @@
+{
+  "name": "module-seed",
+  "version": "1.0.0",
+  "description": "一个集成了常用工作流的模块开发种子仓库。",
+  "main": "dist/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha --compilers js:babel-register",
+    "cover": "node_modules/.bin/istanbul cover _mocha -- --require babel-register test/unit/*.test.js",
+    "build-pro": "node_modules/.bin/babel src -d dist",
+    "build-watch": "node_modules/.bin/babel src --watch -d dist",
+    "code-check": "node_modules/.bin/eslint src/**",
+    "code-fix": "node_modules/.bin/eslint --fix src/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JerryC8080/module-seed.git"
+  },
+  "author": "JerryC (huangjerryc@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JerryC8080/module-seed/issues"
+  },
+  "homepage": "https://github.com/JerryC8080/module-seed#readme",
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-eslint": "^6.0.2",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^5.2.2",
+    "istanbul": "1.0.0-alpha.2",
+    "jsdoc": "^3.5.5",
+    "jsdoc-to-markdown": "^4.0.1",
+    "mocha": "^2.4.5",
+    "should": "^8.3.1"
+  },
+  "dependencies": {}
+}
