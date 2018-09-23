@@ -6,44 +6,19 @@ An extended cache  library.
  2. 支持针对缓存进行逻辑代理
  3. 灵活可配置的数据存储方式
 
-# 基本的读写
+# 基本的读写
 
-# 针对缓存进行逻辑代理
+# 针对缓存进行逻辑代理
 
 TODO 这里描述怎么使用
 1. 新增 adapter，强制更新，以及在获取之前进行逻辑处理以及覆盖全局 options
 2. 获取参数的时候，忽略缓存，强制更新
 
-# 配置存储方式
+# 配置存储方式
 这里可以使用 @beautywe/wxapp-storage
 
 # API
 TODO 你也可以查看网页版：[API Doc]()
-
-## Classes
-
-<dl>
-<dt><a href="#SuperCache">SuperCache</a></dt>
-<dd><p>Class SuperCache.</p>
-</dd>
-</dl>
-
-## Typedefs
-
-<dl>
-<dt><a href="#storageSet">storageSet</a> : <code>function</code></dt>
-<dd></dd>
-<dt><a href="#storageGet">storageGet</a> ⇒ <code>Promise</code> | <code>*</code></dt>
-<dd></dd>
-<dt><a href="#optionsBeforeGet">optionsBeforeGet</a> ⇒ <code>object</code></dt>
-<dd><p>beforeGet callback</p>
-</dd>
-<dt><a href="#optionsData">optionsData</a> ⇒ <code>Promise</code></dt>
-<dd><p>data callback</p>
-</dd>
-</dl>
-
-<a name="SuperCache"></a>
 
 ## SuperCache
 Class SuperCache.
