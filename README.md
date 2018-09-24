@@ -162,16 +162,14 @@ An extended cache  library.
     cache.getAddapter('name').extra === customOptions;
     ```
 
-    ​    
-
-    storage 的 get、set、remove、removeAll 方法的 `this` 都会被绑定到当前实例上，这样的特性可以用来满足针对不同 adapter 进行不同的缓存策略
+     storage 的 get、set、remove、removeAll 方法的 `this` 都会被绑定到当前实例上，这样的特性可以用来满足针对不同 adapter 进行不同的缓存策略
 
     ```javascript
     const cache = new SuperCache({
     	extra: {
     		// 默认缓存时间是 60s
             ttl: 60 * 1000,
-    	}
+    	},
         storage: {
             get(key) {...},
             set(key, value) {
