@@ -10,132 +10,132 @@ An extended cache  library.
 
 1. 安装
 
-```
-$ npm install @brightwe/super-cache
-```
+    ```
+    $ npm install @brightwe/super-cache
+    ```
 
 2. 载入模块
 
-```javascript
-import SuperCache from '@brightwe/super-cache'
-const cache = new SuperCache();
-```
+    ```javascript
+    import SuperCache from '@brightwe/super-cache'
+    const cache = new SuperCache();
+    ```
 
 # 基本操作
 1. set 、 get、remove、removeAll
 
-```javascript
-cache.set('name', 'jc');
-cache.get('name').then(value => console.log(value));
-cache.remove('name');
-cache.removeAll();
-```
+    ```javascript
+    cache.set('name', 'jc');
+    cache.get('name').then(value => console.log(value));
+    cache.remove('name');
+    cache.removeAll();
+    ```
 
 2. 通过 adapter 定义缓存的数据如何获取
 
-```javascript
-// 支持异步返回，Promise
-cache.addAdapter('name', () => {
-    return Promise
-        .resolve()
-        .then(() => API.request('name'))
-});
+    ```javascript
+    // 支持异步返回，Promise
+    cache.addAdapter('name', () => {
+        return Promise
+            .resolve()
+            .then(() => API.request('name'))
+    });
 
-// 支持同步返回
-cache.addAdapter('name', () => ({'jc'}));
-```
+    // 支持同步返回
+    cache.addAdapter('name', () => ({'jc'}));
+    ```
 
 # 高级使用
 
 1. 适配器的高级配置
 
-```javascript
-cache.addAdapter('name', {
+    ```javascript
+    cache.addAdapter('name', {
 
-    // 当调用 get 之后，同时异步获取数据并更新，成功失败不阻塞逻辑。
-    updateAfterGet: true,
+        // 当调用 get 之后，同时异步获取数据并更新，成功失败不阻塞逻辑。
+        updateAfterGet: true,
 
-    // 定义缓存的数据如何获取
-    data() {
-        return Promise
-            .resolve()
-            .then(() => API.request('name'))
-    },
+        // 定义缓存的数据如何获取
+        data() {
+            return Promise
+                .resolve()
+                .then(() => API.request('name'))
+        },
 
-    // 当调用 get 的钩子，可以通过这个钩子来在获取缓存的时候进行逻辑处理，返回值 options 会合并到 get(value, opt) 的 opt
-    beforeGet(cache) {
-        if (cache === 'jc') {
-            return { ignoreCache: true }
-        }
+        // 当调用 get 的钩子，可以通过这个钩子来在获取缓存的时候进行逻辑处理，返回值 options 会合并到 get(value, opt) 的 opt
+        beforeGet(cache) {
+            if (cache === 'jc') {
+                return { ignoreCache: true }
+            }
 
-        return {};
-    },
-});
-```
+            return {};
+        },
+    });
+    ```
 
 2. 带配置的 get
 
-```javascript
-cache.get('name', {
+    ```javascript
+    cache.get('name', {
 
-    // 忽略缓存，调用 adapter 进行数据获取，默认 false
-    ignoreCache: true
+        // 忽略缓存，调用 adapter 进行数据获取，默认 false
+        ignoreCache: true
 
-    // 获取数据之后，是否自动更新到缓存，默认 true
-    updateCache: true
-});
-```
+        // 获取数据之后，是否自动更新到缓存，默认 true
+        updateCache: true
+    });
+    ```
 
 3. 自定义 storage
 
-storage 默认是存储到 memory，但在生产环境中是不科学的做法，你可以自定义数据的存储
+   storage 默认是存储到 memory，但在生产环境中是不科学的做法，你可以自定义数据的存储
 
-```javascript
-const cache = new SuperCache({
-    storage: {
-        get(key) {
-            // this 指针等于当前 cache 实例
-            
-            // 自定义数据的获取
-            const value = seltStorage.get(key);
-            
-            // 然后返回结果，支持 Promise 和非 Promise
-            return value;
-        },
-        set(key, value) {
-            // this 指针等于当前 cache 实例
-            
-            // 自定义数据的存储
-            selfStorage.set(key, value);
-            
-            // 然后返回结果，支持 Promise 和非 Promise
-            return value;
-        },
-        remove(key) {
-            // this 指针等于当前 cache 实例
+    ```javascript
+    const cache = new SuperCache({
+        storage: {
+            get(key) {
+                // this 指针等于当前 cache 实例
+                
+                // 自定义数据的获取
+                const value = seltStorage.get(key);
+                
+                // 然后返回结果，支持 Promise 和非 Promise
+                return value;
+            },
+            set(key, value) {
+                // this 指针等于当前 cache 实例
+                
+                // 自定义数据的存储
+                selfStorage.set(key, value);
+                
+                // 然后返回结果，支持 Promise 和非 Promise
+                return value;
+            },
+            remove(key) {
+                // this 指针等于当前 cache 实例
 
-            return selfStorage.remove(key);
-        },
-        removeAll() {
-            // this 指针等于当前 cache 实例
-            
-            return selfStorage.removeAll();
-        },
-    }
-})
-```
+                return selfStorage.remove(key);
+            },
+            removeAll() {
+                // this 指针等于当前 cache 实例
+                
+                return selfStorage.removeAll();
+            },
+        }
+    })
+    ```
 
 
 
 4. 自定义缓存的 key 前缀
 
-   ```javascript
-   const cache = new SuperCache({
-    	// 默认 'super-cache'   
-       keyPrefix: 'myCacheKeyPrefix',
-       storage: {...},
-   });
-   ```
+    ```javascript
+    const cache = new SuperCache({
+        // 默认 'super-cache'   
+        keyPrefix: 'myCacheKeyPrefix',
+        storage: {...},
+    });
+    ```
 
 
 # API
