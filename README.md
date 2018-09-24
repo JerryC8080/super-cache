@@ -125,8 +125,6 @@ An extended cache  library.
     })
     ```
 
-
-
 4. 自定义缓存的 key 前缀
 
     ```javascript
@@ -134,6 +132,67 @@ An extended cache  library.
         // 默认 'super-cache'   
         keyPrefix: 'myCacheKeyPrefix',
         storage: {...},
+    });
+    ```
+
+5. 自定义的配置
+
+    SuperCache 的实例和 adapter 都支持配置自定义的配置信息：
+
+    ```javascript
+    // 给 SuperCache 实例配置自定义配置
+    const customOptions = {
+        ttl: 60 * 1000,
+    }
+    const cache = new SuperCache({
+        extra: customOptions,
+    });
+        
+    // true
+    cache.extra === customOptions;
+    
+    
+    // 给 adapter 配置自定义配置
+    cache.addAdapter('name', {
+        extra: customOptions,
+        data() {...},
+    });
+        
+    // true
+    cache.getAddapter('name').extra === customOptions;
+    ```
+
+    ​    
+
+    storage 的 get、set、remove、removeAll 方法的 `this` 都会被绑定到当前实例上，这样的特性可以用来满足针对不同 adapter 进行不同的缓存策略
+
+    ```javascript
+    const cache = new SuperCache({
+    	extra: {
+    		// 默认缓存时间是 60s
+            ttl: 60 * 1000,
+    	}
+        storage: {
+            get(key) {...},
+            set(key, value) {
+                // 获取自定义配置信息
+                const adapterTTL = this.getAdapter(key).extra.ttl;
+    			const ttl = this.extra.ttl;
+    
+    			// 调用自定义的存储库
+                myStorage.save(key, { ttl: ttl || adapterTTL });
+            },
+            remove(key) {...},
+            removeAll() {...},
+        },
+    });
+    
+    cache.addAdapter('name', {
+        extra: {
+            // 针对于 name 的缓存，只做 30s 时间缓存
+            ttl: 30 * 1000,
+        },
+        data() {...},
     });
     ```
 
@@ -149,6 +208,7 @@ Class SuperCache.
     * [.get(key, [options])](#SuperCache+get)
     * [.set(key, value)](#SuperCache+set)
     * [.remove(key, value)](#SuperCache+remove)
+    * [.getAdapter(key)](#SuperCache+getAdapter)
     * [.getAdapterValue(key)](#SuperCache+getAdapterValue) ⇒ <code>Promise</code>
     * [.updateByAdapter(key)](#SuperCache+updateByAdapter) ⇒ <code>Promise</code>
     * [.addAdapter(key, options)](#SuperCache+addAdapter)
@@ -169,6 +229,7 @@ Create an instance of SuperCache
 | [options.storage.removeAll] | [<code>storageRemoveAll</code>](#storageRemoveAll) |  | 删除所有数据 |
 | [options.ignoreCache] | <code>boolean</code> | <code>false</code> | 是否忽略缓存 |
 | [options.updateCache] | <code>boolean</code> | <code>true</code> | 是否更新缓存 |
+| [options.extra] | <code>\*</code> |  | 额外的配置信息，可以通过 this.extra 获得 |
 | [options.log] | <code>object</code> |  | 允许改变内部的 log 库 |
 
 <a name="SuperCache+get"></a>
@@ -210,6 +271,17 @@ Remove value
 | key | <code>string</code> | 需要删除数据的 key |
 | value | <code>\*</code> | storage.remove 的返回结果 |
 
+<a name="SuperCache+getAdapter"></a>
+
+### superCache.getAdapter(key)
+Get adapter by key
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+
+| Param | Type |
+| --- | --- |
+| key | <code>string</code> |
+
 <a name="SuperCache+getAdapterValue"></a>
 
 ### superCache.getAdapterValue(key) ⇒ <code>Promise</code>
@@ -249,6 +321,7 @@ Add adapter
 | [options.beforeGet] | [<code>optionsBeforeGet</code>](#optionsBeforeGet) |  | 在调用 adapter 获取数据之前的钩子方法 |
 | [options.ignoreCache] | <code>boolean</code> | <code>false</code> | 是否忽略缓存 |
 | [options.updateCache] | <code>boolean</code> | <code>true</code> | 是否更新缓存 |
+| [options.extra] | <code>\*</code> |  |额外的配置信息，供外部灵活配置，可以通过 this.getAdapters(key).extra获得 |
 
 <a name="storageSet"></a>
 

@@ -72,6 +72,7 @@ class SuperCache {
      * @param {storageRemoveAll} [options.storage.removeAll] 删除所有数据
      * @param {boolean} [options.ignoreCache=false] 是否忽略缓存
      * @param {boolean} [options.updateCache=true] 是否更新缓存
+     * @param {*} [options.extra] 额外的配置信息，可以通过 this.extra 获得
      * @param {object} [options.log] 允许改变内部的 log 库
      *
      */
@@ -81,6 +82,7 @@ class SuperCache {
         updateCache = true,
         storage,
         log = innerLog,
+        extra
     } = {}) {
         this.adapters = {};
 
@@ -88,6 +90,7 @@ class SuperCache {
 
         this.log = log;
         this.defaultOpt = { ignoreCache, updateCache };
+        this.extra = extra;
     }
 
     /**
@@ -155,13 +158,22 @@ class SuperCache {
     }
 
     /**
+     * Get adapter by key
+     * @param {string} key
+     */
+    getAdapter(key) {
+        const adapter = this.adapters[key];
+        if (!adapter) throw new Error(`adapter ${key} was undefined`);
+        return adapter; 
+    }
+
+    /**
      * Get value by adapter
      * @param {string} key 需要获取数据的 key
      * @returns {Promise}  返回一个 Promise 对象，该对象返回需要获取的数据
      */
     getAdapterValue(key) {
-        const adapter = this.adapters[key];
-        if (!adapter) throw new Error(`adapter ${key} was undefined`);
+        const adapter = this.getAdapter(key);
         return Promise.resolve().then(() => adapter.data());
     }
 
@@ -201,6 +213,7 @@ class SuperCache {
      * @param {optionsBeforeGet} [options.beforeGet] 在调用 adapter 获取数据之前的钩子方法
      * @param {boolean} [options.ignoreCache=false] 是否忽略缓存
      * @param {boolean} [options.updateCache=true] 是否更新缓存
+     * @param {*} [options.extra] 额外的配置信息，供外部灵活配置，可以通过 this.getAdapters(key).extra 获得
      */
     addAdapter(key, options) {
         let adapter = options;
