@@ -2,13 +2,13 @@
  * SuperCache
  */
 
-import { log } from "./inner-log";
+import innerLog from "./inner-log";
 
 function initStorage(ins, storage, { keyPrefix }) {
 
-    if (storage === 'memory') {
-        this.memoryCache = {};
-        storege = {
+    if (typeof storage === 'undefined' || storage === 'memory') {
+        ins.memoryCache = {};
+        storage = {
             get(key) {
                 return this.memoryCache[key];
             },
@@ -29,10 +29,10 @@ function initStorage(ins, storage, { keyPrefix }) {
     ins.getData = key => storage.get.call(ins, `${keyPrefix}:${key}`);
     ins.setData = (key, value) => storage.set.call(ins, `${keyPrefix}:${key}`, value);
 
-    if (typeof storege.remove !== 'function') ins.removeData = () => { throw new Error('storage.remove was undefined'); };
+    if (typeof storage.remove !== 'function') ins.removeData = () => { throw new Error('storage.remove was undefined'); };
     else ins.removeData = key => storage.remove.call(ins, `${keyPrefix}:${key}`);
 
-    if (typeof storege.removeAll !== 'function') ins.removeData = () => { throw new Error('storage.removeAll was undefined'); };
+    if (typeof storage.removeAll !== 'function') ins.removeAll = () => { throw new Error('storage.removeAll was undefined'); };
     else ins.removeAll = key => storage.removeAll.call(ins);
 }
 
@@ -80,7 +80,7 @@ class SuperCache {
         ignoreCache = false,
         updateCache = true,
         storage,
-        log,
+        log = innerLog,
     } = {}) {
         this.adapters = {};
 
