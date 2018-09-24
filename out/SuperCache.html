@@ -150,6 +150,8 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -177,6 +179,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -202,6 +206,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -225,10 +237,84 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">数据获取</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>remove</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#storageRemove">storageRemove</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">数据删除</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>removeAll</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#storageRemoveAll">storageRemoveAll</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">删除所有数据</td>
         </tr>
 
     
@@ -398,7 +484,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line14">line 14</a>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -568,6 +654,78 @@
 
         <tr>
             
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#optionsData">optionsData</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">在调用 adapter，通过该函数来获取数据</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>beforeGet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#optionsBeforeGet">optionsBeforeGet</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">在调用 adapter 获取数据之前的钩子方法</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>ignoreCache</code></td>
             
 
@@ -643,78 +801,6 @@
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>beforeGet</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#optionsBeforeGet">optionsBeforeGet</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">在调用 adapter 获取数据之前的钩子方法</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#optionsData">optionsData</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">在调用 adapter，通过该函数来获取数据</td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -759,7 +845,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line160">line 160</a>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line205">line 205</a>
     </li></ul></dd>
     
 
@@ -1062,7 +1148,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line65">line 65</a>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -1197,7 +1283,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line117">line 117</a>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -1242,6 +1328,164 @@
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(key, value)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Remove value
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">需要删除数据的 key</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">storage.remove 的返回结果</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1336,7 +1580,7 @@
 
             
 
-            <td class="description last">key 对应的数据</td>
+            <td class="description last">key storage.remove 的返回结果</td>
         </tr>
 
     
@@ -1377,7 +1621,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line108">line 108</a>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -1512,7 +1756,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line128">line 128</a>
+        <a href="super-cache.js.html">super-cache.js</a>, <a href="super-cache.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -1584,7 +1828,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Sep 23 2018 12:26:05 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Sep 24 2018 12:17:42 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

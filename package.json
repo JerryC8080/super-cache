@@ -1,29 +1,22 @@
 {
-  "name": "module-seed",
-  "version": "1.0.0",
-  "description": "一个集成了常用工作流的模块开发种子仓库。",
-  "main": "dist/index.js",
-  "directories": {
-    "test": "test"
-  },
+  "name": "@brightwe/super-cache",
+  "version": "0.0.1",
+  "description": "An extended cache library.",
+  "main": "dist/super-cache.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha --compilers js:babel-register",
-    "cover": "node_modules/.bin/istanbul cover _mocha -- --require babel-register test/unit/*.test.js",
-    "build-pro": "node_modules/.bin/babel src -d dist",
-    "build-watch": "node_modules/.bin/babel src --watch -d dist",
-    "code-check": "node_modules/.bin/eslint src/**",
-    "code-fix": "node_modules/.bin/eslint --fix src/**"
+    "test": "mocha --compilers js:babel-register",
+    "cover": "istanbul cover _mocha -- --require babel-register test/unit/*.test.js",
+    "build-pro": "babel src -d dist",
+    "build-watch": "babel src --watch -d dist",
+    "code-check": "eslint src/**",
+    "code-fix": "eslint --fix src/**"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JerryC8080/module-seed.git"
+    "url": "git+ssh://git@github.com/BrightWe/super-cache.git"
   },
   "author": "JerryC (huangjerryc@gmail.com)",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JerryC8080/module-seed/issues"
-  },
-  "homepage": "https://github.com/JerryC8080/module-seed#readme",
+  "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-eslint": "^6.0.2",
@@ -40,5 +33,15 @@
     "mocha": "^2.4.5",
     "should": "^8.3.1"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/BrightWe/super-cache/issues"
+  },
+  "homepage": "https://github.com/BrightWe/super-cache#readme",
+  "directories": {
+    "test": "test"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
