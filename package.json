@@ -1,6 +1,6 @@
 {
   "name": "@brightwe/super-cache",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An extended cache library.",
   "main": "dist/super-cache.js",
   "scripts": {
