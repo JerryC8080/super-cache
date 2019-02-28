@@ -11,7 +11,7 @@ An extended cache  library.
 1. 安装
 
     ```
-    $ npm install @brightwe/super-cache
+    $ npm install @jerryc/super-cache
     ```
 
 2. 载入模块
