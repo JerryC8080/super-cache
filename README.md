@@ -2,9 +2,36 @@
 An extended cache  library.
 
 # Feature
-  1. 满足最基本的缓存需求，读取（get）和保存（set）
+  1. 提供一套「服务端接口耗时慢，但加载性能要求高」场景的解决方案
+  2. 满足最基本的缓存需求，读取（get）和保存（set）
   2. 支持针对缓存进行逻辑代理
   3. 灵活可配置的数据存储方式
+
+# How it work
+
+一般的请求数据的形式是，页面加载的时候，从服务端获取数据，然后等待数据返回之后，进行页面渲染：
+
+![](https://img.yzcdn.cn/public_files/2019/03/01/8ef4fa605cae10f80dc5838de13bd508.png)
+
+但这种模式，会受到服务端接口耗时，网络环境等因素影响到加载性能。   
+
+对于加载性能要求高的页面（如首页），一般的 Web 开发我们有很多解决方案（如服务端渲染，服务端缓存，SSR 等）。      
+但是也有一些环境不能使用这种技术（如微信小程序）。
+
+Super Cache 提供了一个中间数据缓存的解决方案：
+
+![](https://img.yzcdn.cn/public_files/2019/03/01/271ade0bb4cadfad41a49acd4b268e29.png)
+
+Super Cache 的解决思路：    
+1. 当你需要获取一个数据的时候，如果有缓存，先把旧的数据给你。
+2. 然后再从服务端获取新的数据，刷新缓存。
+3. 如果一开始没有缓存，则请求服务端数据，再把数据返回。
+4. 下一次请求缓存，从第一步开始。
+
+这种解决方案，舍弃了一点数据的实时性（非第一次请求，只能获取上一次最新数据），大大提高了前端的加载性能。    
+适合的场景：    
+1. 数据实时性要求不高。
+2. 服务端接口耗时长。
 
 # 使用
 
@@ -49,44 +76,47 @@ An extended cache  library.
 
 1. 适配器的高级配置
 
-    ```javascript
-    cache.addAdapter('name', {
-
-        // 当调用 get 之后，同时异步获取数据并更新，成功失败不阻塞逻辑。
-        updateAfterGet: true,
-
-        // 定义缓存的数据如何获取
-        data() {
-            return Promise
-                .resolve()
-                .then(() => API.request('name'))
-        },
-
-        // 当调用 get 的钩子，可以通过这个钩子来在获取缓存的时候进行逻辑处理，返回值 options 会合并到 get(value, opt) 的 opt
-        beforeGet(cache) {
-            if (cache === 'jc') {
-                return { ignoreCache: true }
-            }
-
-            return {};
-        },
-    });
-    ```
-
-2. 带配置的 get
+    在 `new SuperCache()`、`addAdapter()` 与 `get()` 方法中，都支持对 adapter 进行配置：
 
     ```javascript
-    cache.get('name', {
+    const adapterOptions = {
 
-        // 忽略缓存，调用 adapter 进行数据获取，默认 false
-        ignoreCache: true
+        // 是否忽略缓存，默认为 false。如果为 true，则 get() 每次都会请求 adapter 获取数据
+        ignoreCache: false,
 
-        // 获取数据之后，是否自动更新到缓存，默认 true
-        updateCache: true
+        // 是否更新缓存，默认为 true。如果为 false，则 get() 请求回来的数据，不会更新到缓存中
+        updateCache: true,
+
+        // get() 操作的回调钩子
+        beforeGet: function(value) {
+            // ... 
+
+            // 允许修改该次 get 操作的 adapterOptions，且支持异步的形式。
+            return Promise.resolve(newAdapterOptions);
+        },
+    }
+
+    // 配置会作用于 cache 范围内的所有 adapter
+    const cache = new SuperCache({
+        adapterOptions,
     });
+
+
+    // 配置会作用于该 adapter 范围内
+    cache.addAdapter(key, {
+        data: function() {...},
+        ...adapterOptions,
+    });
+
+    // 配置只会作用于该次 get 操作
+    cache.get(key, {
+        adapterOptions,
+    })
     ```
 
-3. 自定义 storage
+    adapterOptions 可以设置的值参考：
+
+2. 自定义 storage
 
    storage 默认是存储到 memory，但在生产环境中是不科学的做法，你可以自定义数据的存储
 
@@ -125,7 +155,7 @@ An extended cache  library.
     })
     ```
 
-4. 自定义缓存的 key 前缀
+3. 自定义缓存的 key 前缀
 
     ```javascript
     const cache = new SuperCache({
@@ -135,7 +165,7 @@ An extended cache  library.
     });
     ```
 
-5. 自定义的配置
+4. 自定义的配置
 
     SuperCache 的实例和 adapter 都支持配置自定义的配置信息：
 
@@ -196,186 +226,3 @@ An extended cache  library.
 
 
 # API
-## SuperCache
-Class SuperCache.
-
-**Kind**: global class
-
-* [SuperCache](#SuperCache)
-    * [new SuperCache(options)](#new_SuperCache_new)
-    * [.get(key, [options])](#SuperCache+get)
-    * [.set(key, value)](#SuperCache+set)
-    * [.remove(key, value)](#SuperCache+remove)
-    * [.getAdapter(key)](#SuperCache+getAdapter)
-    * [.getAdapterValue(key)](#SuperCache+getAdapterValue) ⇒ <code>Promise</code>
-    * [.updateByAdapter(key)](#SuperCache+updateByAdapter) ⇒ <code>Promise</code>
-    * [.addAdapter(key, options)](#SuperCache+addAdapter)
-
-<a name="new_SuperCache_new"></a>
-
-### new SuperCache(options)
-Create an instance of SuperCache
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| options | <code>object</code> |  | 配置信息 |
-| [options.storage] | <code>object</code> |  | 自定义数据存储器 |
-| options.storage.set | [<code>storageSet</code>](#storageSet) |  | 数据保存 |
-| options.storage.get | [<code>storageGet</code>](#storageGet) |  | 数据获取 |
-| [options.storage.remove] | [<code>storageRemove</code>](#storageRemove) |  | 数据删除 |
-| [options.storage.removeAll] | [<code>storageRemoveAll</code>](#storageRemoveAll) |  | 删除所有数据 |
-| [options.ignoreCache] | <code>boolean</code> | <code>false</code> | 是否忽略缓存 |
-| [options.updateCache] | <code>boolean</code> | <code>true</code> | 是否更新缓存 |
-| [options.extra] | <code>\*</code> |  | 额外的配置信息，可以通过 this.extra 获得 |
-| [options.log] | <code>object</code> |  | 允许改变内部的 log 库 |
-
-<a name="SuperCache+get"></a>
-
-### superCache.get(key, [options])
-Get value
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| key | <code>string</code> |  | 需要获取数据的 key |
-| [options] | <code>object</code> |  | 配置信息 |
-| [options.ignoreCache] | <code>boolean</code> | <code>false</code> | 是否忽略缓存 |
-| [options.updateCache] | <code>boolean</code> | <code>true</code> | 是否更新缓存 |
-| [options.beforeGet] | [<code>optionsBeforeGet</code>](#optionsBeforeGet) |  | 在调用 adapter 获取数据之前的钩子方法 |
-
-<a name="SuperCache+set"></a>
-
-### superCache.set(key, value)
-Set value
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要获取数据的 key |
-| value | <code>\*</code> | storage.remove 的返回结果 |
-
-<a name="SuperCache+remove"></a>
-
-### superCache.remove(key, value)
-Remove value
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要删除数据的 key |
-| value | <code>\*</code> | storage.remove 的返回结果 |
-
-<a name="SuperCache+getAdapter"></a>
-
-### superCache.getAdapter(key)
-Get adapter by key
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-
-| Param | Type |
-| --- | --- |
-| key | <code>string</code> |
-
-<a name="SuperCache+getAdapterValue"></a>
-
-### superCache.getAdapterValue(key) ⇒ <code>Promise</code>
-Get value by adapter
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-**Returns**: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要获取数据的 key |
-
-<a name="SuperCache+updateByAdapter"></a>
-
-### superCache.updateByAdapter(key) ⇒ <code>Promise</code>
-Update value by adapter
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-**Returns**: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要获取数据的 key |
-
-<a name="SuperCache+addAdapter"></a>
-
-### superCache.addAdapter(key, options)
-Add adapter
-
-**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| key | <code>string</code> |  |  |
-| options | <code>object</code> \| <code>function</code> |  | 如果是 object，参数看下面，如果是function，则会变成 options.data = options |
-| options.data | [<code>optionsData</code>](#optionsData) |  | 在调用 adapter，通过该函数来获取数据 |
-| [options.beforeGet] | [<code>optionsBeforeGet</code>](#optionsBeforeGet) |  | 在调用 adapter 获取数据之前的钩子方法 |
-| [options.ignoreCache] | <code>boolean</code> | <code>false</code> | 是否忽略缓存 |
-| [options.updateCache] | <code>boolean</code> | <code>true</code> | 是否更新缓存 |
-| [options.extra] | <code>\*</code> |  |额外的配置信息，供外部灵活配置，可以通过 this.getAdapters(key).extra获得 |
-
-<a name="storageSet"></a>
-
-## storageSet : <code>function</code>
-**Kind**: global typedef
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要获取数据的 key |
-| data | <code>\*</code> | storage.get 的返回值 |
-
-<a name="storageRemove"></a>
-
-## storageRemove : <code>function</code>
-**Kind**: global typedef
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要获取数据的 key |
-| data | <code>\*</code> | storage.remove 的返回值 |
-
-<a name="storageRemoveAll"></a>
-
-## storageRemoveAll : <code>function</code>
-**Kind**: global typedef
-
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>\*</code> | storage.removeAll 的返回值 |
-
-<a name="storageGet"></a>
-
-## storageGet ⇒ <code>Promise</code> \| <code>\*</code>
-**Kind**: global typedef
-**Returns**: <code>Promise</code> \| <code>\*</code> - 如果返回非 Promise，内部会转化为 Promise
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | 需要获取数据的 key |
-
-<a name="optionsBeforeGet"></a>
-
-## optionsBeforeGet ⇒ <code>object</code>
-beforeGet callback
-
-**Kind**: global typedef
-**Returns**: <code>object</code> - runtimeOpt 运行时的配置信息，会暂时覆盖实例的配置
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cache | <code>\*</code> | 存储在 storage 的缓存数据，如果没有则为 undefined |
-
-<a name="optionsData"></a>
-
-## optionsData ⇒ <code>Promise</code>
-data callback
-
-**Kind**: global typedef
-**Returns**: <code>Promise</code> - 需要返回一个 Promise 对象，该对象返回需要存储的数据
