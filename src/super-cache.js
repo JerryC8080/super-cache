@@ -53,8 +53,7 @@ const adapterDefaultOptions = {
     beforeGet: undefined,
 };
 
-function initStorage(ins, storage, { keyPrefix }) {
-
+function initStorage(ins, storage) {
     if (typeof storage === 'undefined' || storage === 'memory') {
         ins.memoryCache = {};
         storage = {
@@ -73,13 +72,14 @@ function initStorage(ins, storage, { keyPrefix }) {
         };
     }
 
+    if (!storage.keyPrefix) storage.keyPrefix = 'super-cache';
     if (typeof storage.get !== 'function') throw new Error('storage.get must typeof function');
     if (typeof storage.set !== 'function') throw new Error('storage.set must typeof function');
-    ins.getData = key => storage.get.call(ins, `${keyPrefix}:${key}`);
-    ins.setData = (key, value) => storage.set.call(ins, `${keyPrefix}:${key}`, value);
+    ins.getData = key => storage.get.call(ins, `${storage.keyPrefix}:${key}`);
+    ins.setData = (key, value) => storage.set.call(ins, `${storage.keyPrefix}:${key}`, value);
 
     if (typeof storage.remove !== 'function') ins.removeData = () => { throw new Error('storage.remove was undefined'); };
-    else ins.removeData = key => storage.remove.call(ins, `${keyPrefix}:${key}`);
+    else ins.removeData = key => storage.remove.call(ins, `${storage.keyPrefix}:${key}`);
 
     if (typeof storage.removeAll !== 'function') ins.removeAll = () => { throw new Error('storage.removeAll was undefined'); };
     else ins.removeAll = key => storage.removeAll.call(ins);
@@ -96,6 +96,7 @@ class SuperCache {
      * @param {storageGet} options.storage.get 数据获取
      * @param {storageRemove} [options.storage.remove] 数据删除
      * @param {storageRemoveAll} [options.storage.removeAll] 删除所有数据
+     * @param {string} [options.storage.keyPrefix] 数据库缓存 key 的前缀，默认：'super-cache'
      * @param {AdapterOptions} [options.adapterOptions] - adapter 的全局配置
      * @param {*} [options.extra] 额外的配置信息，可以通过 this.extra 获得
      
@@ -103,7 +104,6 @@ class SuperCache {
      *
      */
     constructor({
-        keyPrefix = 'super-cache',
         adapterOptions,
         storage,
         log = innerLog,
@@ -111,7 +111,7 @@ class SuperCache {
     } = {}) {
         this.adapters = {};
 
-        initStorage(this, storage, { keyPrefix });
+        initStorage(this, storage);
 
         this.log = log;
         this.adapterGlobalOptions = Object.assign({}, adapterDefaultOptions, adapterOptions);
@@ -169,7 +169,7 @@ class SuperCache {
                         .getAndUpdateAdapterValue(key, domain.adapterOptions)
 
                         // 自己处理 error，不阻塞流程
-                        .catch((error) => log.error('super-cache:updateCache', 'getAndUpdateAdapterValue fail', error));
+                        .catch((error) => this.log.error('updateCache', 'getAndUpdateAdapterValue fail', error));
                 }
 
                 // 默认返回缓存数据
@@ -255,7 +255,7 @@ class SuperCache {
         if (typeof _adapter === 'function') _adapter = { data: _adapter };
         else if (typeof _adapter.data !== 'function') throw new Error('data() must typeof function');
         if (!_adapter.options) _adapter.options = {};
-        this.log.info('super-cache:addAdatper', `adapter ${key} was attatched`);
+        this.log.info('addAdatper', `adapter ${key} was attatched`);
         this.adapters[key] = _adapter;
     }
 }

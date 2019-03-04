@@ -143,11 +143,112 @@ test('adapter.options.updateCache && ignoreCache', (t) => {
         });
 });
 
-// TODO
-// adapter.options.beforeGet
+test('adapter.options.beforeGet', (t) => {
 
-// TODO
-// custom storage
+    return Promise
+        .resolve()
 
-// TODO
-// extra data for SuperCache() and addAdapter()
+        // beforeGet in global scope
+        .then(() => {
+            const cache = new SuperCache({
+                adapterOptions: {
+                    beforeGet(value) {
+                        return Promise.resolve({
+                            updateCache: false,
+                        });
+                    },
+                },
+            });
+
+            let reqTimes = 0;
+            cache.addAdapter('age', {
+                data() {
+                    return Promise
+                        .resolve([18, 19][reqTimes])
+                        .then((value) => {
+                            reqTimes++;
+                            return value;
+                        });
+                }
+            });
+
+            return Promise
+                .resolve()
+                .then(() => cache.get('age'))
+                .then((value) => {
+                    t.is(value, 18);
+                    t.is(cache.getData('age'), undefined);
+                })
+                .then(() => cache.get('age'))
+                .then((value) => {
+                    t.is(value, 19);
+                    t.is(cache.getData('age'), undefined);
+                });
+        });
+});
+
+test('custom storage', async (t) => {
+    const testStorage = {
+        storage: {},
+        get(key) {
+            return this.storage[key];
+        },
+        set(key, value) {
+            this.storage[key] = value;
+        },
+        remove(key) {
+            delete this.storage[key];
+        },
+        removeAll() {
+            this.storage = {};
+        },
+        keyPrefix: 'test-storage',
+    }
+
+    const cache = new SuperCache({
+        storage: {
+            get(key) {
+                t.is(this, cache);
+                return testStorage.get(key);
+            },
+            set(key, value) {
+                return testStorage.set(key, value);
+            },
+            remove(key) {
+                return testStorage.remove(key);
+            },
+            removeAll() {
+                return testStorage.removeAll();
+            },
+            keyPrefix: testStorage.keyPrefix,
+        },
+    });
+
+    t.is(await cache.get('name'), undefined);
+
+    cache.set('name', 'jc');
+    t.is(testStorage.storage[`${testStorage.keyPrefix}:name`], 'jc');
+    t.is(await cache.get('name'), 'jc');
+
+    cache.remove('name');
+    t.is(testStorage.storage[`${testStorage.keyPrefix}:name`], undefined);
+    t.is(await cache.get('name'), undefined);
+})
+
+test('optinos.extra for SuperCache & addAdapter()', (t) => {
+    const extra = Symbol();
+    const cache = new SuperCache({
+        extra,
+    });
+
+    t.is(extra, cache.extra);
+
+    cache.addAdapter('name', {
+        extra,
+        data() {
+            return Promise.resolve(123);
+        },
+    });
+
+    t.is(extra, cache.getAdapter('name').extra);
+});
