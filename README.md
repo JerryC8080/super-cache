@@ -1,5 +1,5 @@
 # SuperCache
-An extended cache  library.
+An extended cache library.
 
 # Feature
   1. 提供一套「服务端接口耗时慢，但加载性能要求高」场景的解决方案
@@ -239,3 +239,226 @@ Super Cache 的解决思路：
     ```
 
 # API
+
+## SuperCache
+Class SuperCache.
+
+**Kind**: global class
+
+* [SuperCache](#SuperCache)
+    * [new SuperCache(options)](#new_SuperCache_new)
+    * [.get(key)](#SuperCache+get) ⇒ <code>Promise</code>
+    * [.set(key, value)](#SuperCache+set)
+    * [.remove(key, value)](#SuperCache+remove)
+    * [.getAdapter(key)](#SuperCache+getAdapter) ⇒ <code>object</code>
+    * [.getAdapterValue(key)](#SuperCache+getAdapterValue) ⇒ <code>Promise</code>
+    * [.getAndUpdateAdapterValue(key)](#SuperCache+getAndUpdateAdapterValue) ⇒ <code>Promise</code>
+    * [.addAdapter(key, adapter)](#SuperCache+addAdapter)
+
+<a name="new_SuperCache_new"></a>
+
+### new SuperCache(options)
+Create an instance of SuperCache
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>object</code> | 配置信息 |
+| [options.storage] | <code>object</code> | 自定义数据存储器 |
+| options.storage.set | [<code>storageSet</code>](#storageSet) | 数据保存 |
+| options.storage.get | [<code>storageGet</code>](#storageGet) | 数据获取 |
+| [options.storage.remove] | [<code>storageRemove</code>](#storageRemove) | 数据删除 |
+| [options.storage.removeAll] | [<code>storageRemoveAll</code>](#storageRemoveAll) | 删除所有数据 |
+| [options.storage.keyPrefix] | <code>string</code> | 数据库缓存 key 的前缀，默认：'super-cache' |
+| [options.adapterOptions] | <code>AdapterOptions</code> | adapter 的全局配置 |
+| [options.extra] | <code>\*</code> | 额外的配置信息，可以通过 this.extra 获得 |
+| [options.log] | <code>object</code> | 允许改变内部的 log 库 |
+
+<a name="SuperCache+get"></a>
+
+### superCache.get(key) ⇒ <code>Promise</code>
+Get value
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+**Returns**: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+| [options.adapterOptions] | <code>AdapterOptions</code> | adapter 配置 |
+
+<a name="SuperCache+set"></a>
+
+### superCache.set(key, value)
+Set value
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+| value | <code>\*</code> | storage.remove 的返回结果 |
+
+<a name="SuperCache+remove"></a>
+
+### superCache.remove(key, value)
+Remove value
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要删除数据的 key |
+| value | <code>\*</code> | storage.remove 的返回结果 |
+
+<a name="SuperCache+getAdapter"></a>
+
+### superCache.getAdapter(key) ⇒ <code>object</code>
+Get adapter by key
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+**Returns**: <code>object</code> - 返回 adapter 对象
+
+| Param | Type |
+| --- | --- |
+| key | <code>string</code> |
+
+<a name="SuperCache+getAdapterValue"></a>
+
+### superCache.getAdapterValue(key) ⇒ <code>Promise</code>
+Get value by adapter
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+**Returns**: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+
+<a name="SuperCache+getAndUpdateAdapterValue"></a>
+
+### superCache.getAndUpdateAdapterValue(key) ⇒ <code>Promise</code>
+Get and Update value by adapter
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+**Returns**: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+
+<a name="SuperCache+addAdapter"></a>
+
+### superCache.addAdapter(key, adapter)
+Add adapter
+
+**Kind**: instance method of [<code>SuperCache</code>](#SuperCache)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> |  |
+| adapter | <code>object</code> \| <code>function</code> | 如果是 object，参数看下面，如果是function，则会变成 adapter.data = adapter |
+| adapter.data | [<code>adapterDataFunction</code>](#adapterDataFunction) | 在调用 adapter，通过该函数来获取数据 |
+| [adapter.options] | <code>AdapterOptions</code> | adapter 配置 |
+| [options.extra] | <code>\*</code> |额外的配置信息，供外部灵活配置，可以通过 this.getAdapters(key).extra 获得     * |
+
+<a name="adapterDefaultOptions"></a>
+
+## adapterDefaultOptions
+Adapter Default Options
+
+**Kind**: global constant
+**Typeof**: <code>Object</code> AdapterOptions
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| [ignoreCache] | <code>boolean</code> | <code>false</code> | 是否忽略缓存 |
+| [updateCache] | <code>boolean</code> | <code>true</code> | 是否在数据返回之后更新缓存 |
+| [beforeGet] | [<code>optionsBeforeGet</code>](#optionsBeforeGet) | <code>undefinded</code> | 在调用 adapter 获取数据之前的钩子方法 |
+
+<a name="storageSet"></a>
+
+## storageSet : <code>function</code>
+**Kind**: global typedef
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+| data | <code>\*</code> | storage.get 的返回值 |
+
+<a name="storageRemove"></a>
+
+## storageRemove : <code>function</code>
+**Kind**: global typedef
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+| data | <code>\*</code> | storage.remove 的返回值 |
+
+<a name="storageRemoveAll"></a>
+
+## storageRemoveAll : <code>function</code>
+**Kind**: global typedef
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>\*</code> | storage.removeAll 的返回值 |
+
+<a name="storageGet"></a>
+
+## storageGet ⇒ <code>Promise</code> \| <code>\*</code>
+**Kind**: global typedef
+**Returns**: <code>Promise</code> \| <code>\*</code> - 如果返回非 Promise，内部会转化为 Promise
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | 需要获取数据的 key |
+
+<a name="optionsBeforeGet"></a>
+
+## optionsBeforeGet ⇒ <code>object</code>
+beforeGet callback
+
+**Kind**: global typedef
+**Returns**: <code>object</code> - runtimeOpt 运行时的配置信息，会暂时覆盖实例的配置
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cache | <code>\*</code> | 存储在 storage 的缓存数据，如果没有则为 undefined |
+
+<a name="adapterDataFunction"></a>
+
+## adapterDataFunction ⇒ <code>Promise</code>
+data callback
+
+**Kind**: global typedef
+**Returns**: <code>Promise</code> - 需要返回一个 Promise 对象，该对象返回需要存储的数据
+
+## Constants
+
+<dl>
+<dt><a href="#adapterDefaultOptions">adapterDefaultOptions</a></dt>
+<dd><p>Adapter Default Options</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#storageSet">storageSet</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#storageRemove">storageRemove</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#storageRemoveAll">storageRemoveAll</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#storageGet">storageGet</a> ⇒ <code>Promise</code> | <code>*</code></dt>
+<dd></dd>
+<dt><a href="#optionsBeforeGet">optionsBeforeGet</a> ⇒ <code>object</code></dt>
+<dd><p>beforeGet callback</p>
+</dd>
+<dt><a href="#adapterDataFunction">adapterDataFunction</a> ⇒ <code>Promise</code></dt>
+<dd><p>data callback</p>
+</dd>
+</dl>
