@@ -1,7 +1,7 @@
 function addLog(log) {
     log.timestamp = Date.now();
     log.time = (new Date(log.timestamp)).toLocaleString();
-    console[log.level](`[${log.title}]:${log.message} -- ${(new Date(log.timestamp)).toLocaleString()}`, log.data);
+    console[log.level](`[${log.title}]:${log.message} -- ${(new Date(log.timestamp)).toLocaleString()}`, log.data || '');
 }
 
 const innerLog = {
