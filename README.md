@@ -151,21 +151,14 @@ Super Cache 的解决思路：
                 
                 return selfStorage.removeAll();
             },
+
+            // 设置缓存 key 的前缀，最终会成为：super-cache:${key}
+            keyPrefix: 'super-cache',
         }
-    })
-    ```
-
-3. 自定义缓存的 key 前缀
-
-    ```javascript
-    const cache = new SuperCache({
-        // 默认 'super-cache'   
-        keyPrefix: 'myCacheKeyPrefix',
-        storage: {...},
     });
     ```
 
-4. 自定义的配置
+3. 自定义的配置
 
     SuperCache 的实例和 adapter 都支持配置自定义的配置信息：
 
@@ -192,29 +185,50 @@ Super Cache 的解决思路：
     cache.getAddapter('name').extra === customOptions;
     ```
 
-     storage 的 get、set、remove、removeAll 方法的 `this` 都会被绑定到当前实例上，这样的特性可以用来满足针对不同 adapter 进行不同的缓存策略
+4. 额外的配置信息
+
+    `SuperCache()` 和 `cacheInstance.addAdapter()` 都支持配置额外的自定义字段：
 
     ```javascript
     const cache = new SuperCache({
-    	extra: {
-    		// 默认缓存时间是 60s
+        extra: { name: 'jc' },
+    });
+
+    // { name: 'jc' }
+    cache.extra;
+
+    cache.addAdapter('name', {
+        extra: { name: 'david' },
+        data() {...},
+    });
+
+    // { name: 'david' }
+    cache.getAdapter('name').extra;
+    ```
+
+    利用这种特性，我们可以满足 storage 中针对不同的 adapter 进行不同的缓存策略：
+
+    ```javascript
+    const cache = new SuperCache({
+        extra: {
+            // 默认缓存时间是 60s
             ttl: 60 * 1000,
-    	},
+        },
         storage: {
             get(key) {...},
             set(key, value) {
                 // 获取自定义配置信息
                 const adapterTTL = this.getAdapter(key).extra.ttl;
-    			const ttl = this.extra.ttl;
-    
-    			// 调用自定义的存储库
+                const ttl = this.extra.ttl;
+
+                // 调用自定义的存储库
                 myStorage.save(key, { ttl: ttl || adapterTTL });
             },
             remove(key) {...},
             removeAll() {...},
         },
     });
-    
+
     cache.addAdapter('name', {
         extra: {
             // 针对于 name 的缓存，只做 30s 时间缓存
@@ -223,6 +237,5 @@ Super Cache 的解决思路：
         data() {...},
     });
     ```
-
 
 # API
