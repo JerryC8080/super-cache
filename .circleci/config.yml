@@ -54,6 +54,11 @@ jobs:
       - run:
           name: Test Coverage
           command: npm run test:coverage
+      - run:
+          name: Report for coveralls
+          command: |
+              npm install coveralls --save-dev
+              ./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls
       - store_artifacts:
           path: coverage
 
