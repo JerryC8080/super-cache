@@ -1,4 +1,11 @@
 # SuperCache
+
+[![NPM Version](https://img.shields.io/npm/v/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache)
+
+[![NPM Downloads](https://img.shields.io/npm/dm/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache)
+
+[![Coverage Status](https://coveralls.io/repos/github/JerryC8080/super-cache/badge.svg?branch=master)](https://coveralls.io/github/JerryC8080/super-cache?branch=master)
+
 An extended cache library.
 
 # Unit Test Coverage
