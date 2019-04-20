@@ -4,8 +4,8 @@
   "description": "An extended cache library.",
   "main": "dist/super-cache.js",
   "scripts": {
-    "test": "node_modules/.bin/nyc ava test/**/*.test.js",
-    "test-report": "node_modules/.bin/nyc report --reporter=html",
+    "test": "ava",
+    "test:coverage": "nyc --reporter=html ava",
     "build-pro": "babel src -d dist",
     "build-watch": "babel src --watch -d dist",
     "code-check": "eslint src/**",
@@ -36,7 +36,6 @@
     "pre-commit": "^1.2.2",
     "validate-commit-msg": "^2.14.0"
   },
-  "dependencies": {},
   "bugs": {
     "url": "https://github.com/JerryC8080/super-cache/issues"
   },
@@ -45,6 +44,9 @@
     "test": "test"
   },
   "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ],
     "require": [
       "@babel/register",
       "@babel/polyfill"
