@@ -62,6 +62,13 @@ jobs:
       - store_artifacts:
           path: coverage
 
+  eslint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: ./node_modules/.bin/eslint ./src 
+
 workflows:
   build-and-test:
     jobs:
@@ -70,5 +77,8 @@ workflows:
           requires:
             - build
       - test-coverage:
+          requires:
+            - build
+      - eslint:
           requires:
             - build

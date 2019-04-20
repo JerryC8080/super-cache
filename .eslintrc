@@ -5,7 +5,7 @@
       "sourceType": "module"
     },
     "extends": [
-      "airbnb",
+      "airbnb-base",
       "eslint:recommended"
     ],
     "plugins": [
