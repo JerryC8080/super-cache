@@ -6,13 +6,6 @@
 
 An extended cache library.
 
-# Unit Test Coverage
-File            |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
-----------------|----------|----------|----------|----------|-------------------|
-All files       |     86.6 |       82 |       76 |    92.96 |                   |
- inner-log.js   |    66.67 |      100 |       40 |    66.67 |           9,10,11 |
- super-cache.js |    88.64 |    81.25 |       85 |    96.77 |           172,185 |
-
 # Feature
   1. 提供一套「服务端接口耗时慢，但加载性能要求高」场景的解决方案
   2. 满足最基本的缓存需求，读取（get）和保存（set）
