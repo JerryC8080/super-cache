@@ -1,10 +1,8 @@
 # SuperCache
 
-[![NPM Version](https://img.shields.io/npm/v/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache)
+[![CircleCI](https://circleci.com/gh/JerryC8080/super-cache/tree/master.svg?style=svg)](https://circleci.com/gh/JerryC8080/super-cache/tree/master) 
 
-[![NPM Downloads](https://img.shields.io/npm/dm/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache)
-
-[![Coverage Status](https://coveralls.io/repos/github/JerryC8080/super-cache/badge.svg?branch=master)](https://coveralls.io/github/JerryC8080/super-cache?branch=master)
+[![NPM Version](https://img.shields.io/npm/v/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache) [![NPM Downloads](https://img.shields.io/npm/dm/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache) [![Coverage Status](https://coveralls.io/repos/github/JerryC8080/super-cache/badge.svg?branch=master)](https://coveralls.io/github/JerryC8080/super-cache?branch=master) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@jerryc/super-cache.svg)
 
 An extended cache library.
 
