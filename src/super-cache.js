@@ -63,7 +63,7 @@ function initStorage(ins, storage) {
             set(key, value) {
                 return this.memoryCache[key] = value;
             },
-            remove(key, value) {
+            remove(key) {
                 delete this.memoryCache[key];
             },
             removeAll() {
@@ -82,7 +82,7 @@ function initStorage(ins, storage) {
     else ins.removeData = key => storage.remove.call(ins, `${storage.keyPrefix}:${key}`);
 
     if (typeof storage.removeAll !== 'function') ins.removeAll = () => { throw new Error('storage.removeAll was undefined'); };
-    else ins.removeAll = key => storage.removeAll.call(ins);
+    else ins.removeAll = () => storage.removeAll.call(ins);
 }
 
 /** Class SuperCache. */
@@ -183,7 +183,7 @@ class SuperCache {
 
                 // 其他情况，让外部处理错误
                 throw err;
-            })
+            });
     }
 
     /**

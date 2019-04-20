@@ -4,8 +4,8 @@
   "description": "An extended cache library.",
   "main": "dist/super-cache.js",
   "scripts": {
-    "test": "node_modules/.bin/nyc ava test/**/*.test.js",
-    "test-report": "node_modules/.bin/nyc report --reporter=html",
+    "test": "ava",
+    "test:coverage": "nyc --reporter=html ava",
     "build-pro": "babel src -d dist",
     "build-watch": "babel src --watch -d dist",
     "code-check": "eslint src/**",
@@ -29,14 +29,13 @@
     "ava": "^1.2.1",
     "babel-eslint": "^9.0.0",
     "commitizen": "^3.0.5",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-plugin-import": "^1.12.0",
-    "nyc": "^13.1.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "nyc": "^14.0.0",
     "pre-commit": "^1.2.2",
     "validate-commit-msg": "^2.14.0"
   },
-  "dependencies": {},
   "bugs": {
     "url": "https://github.com/JerryC8080/super-cache/issues"
   },
@@ -45,6 +44,9 @@
     "test": "test"
   },
   "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ],
     "require": [
       "@babel/register",
       "@babel/polyfill"

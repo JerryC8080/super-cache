@@ -1,12 +1,10 @@
 # SuperCache
-An extended cache library.
 
-# Unit Test Coverage
-File            |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
-----------------|----------|----------|----------|----------|-------------------|
-All files       |     86.6 |       82 |       76 |    92.96 |                   |
- inner-log.js   |    66.67 |      100 |       40 |    66.67 |           9,10,11 |
- super-cache.js |    88.64 |    81.25 |       85 |    96.77 |           172,185 |
+[![CircleCI](https://circleci.com/gh/JerryC8080/super-cache/tree/master.svg?style=svg)](https://circleci.com/gh/JerryC8080/super-cache/tree/master) 
+
+[![NPM Version](https://img.shields.io/npm/v/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache) [![NPM Downloads](https://img.shields.io/npm/dm/@jerryc/super-cache.svg)](https://www.npmjs.com/package/@jerryc/super-cache) [![Coverage Status](https://coveralls.io/repos/github/JerryC8080/super-cache/badge.svg?branch=master)](https://coveralls.io/github/JerryC8080/super-cache?branch=master) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@jerryc/super-cache.svg)
+
+An extended cache library.
 
 # Feature
   1. 提供一套「服务端接口耗时慢，但加载性能要求高」场景的解决方案
