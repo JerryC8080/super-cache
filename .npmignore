@@ -4,3 +4,5 @@ test
 .babelrc
 .gitignore
 yarn.lock
+.circleci
+.nyc_output

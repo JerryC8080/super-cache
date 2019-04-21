@@ -69,6 +69,18 @@ jobs:
           at: ~/repo
       - run: ./node_modules/.bin/eslint ./src 
 
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+        at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
 workflows:
   build-and-test:
     jobs:
@@ -82,3 +94,22 @@ workflows:
       - eslint:
           requires:
             - build
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - eslint:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - build
+            - test
+            - eslint
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: master
