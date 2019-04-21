@@ -82,22 +82,13 @@ jobs:
           command: npm publish
 
 workflows:
-  build-and-test:
+  build-test-and-deploy:
     jobs:
       - build
       - test:
           requires:
             - build
       - test-coverage:
-          requires:
-            - build
-      - eslint:
-          requires:
-            - build
-  build-test-and-deploy:
-    jobs:
-      - build
-      - test:
           requires:
             - build
       - eslint:
