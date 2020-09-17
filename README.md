@@ -16,7 +16,7 @@ An extended cache library.
 
 一般的请求数据的形式是，页面加载的时候，从服务端获取数据，然后等待数据返回之后，进行页面渲染：
 
-![](https://bluesun-1252625244.cos.ap-guangzhou.myqcloud.com/img/20200917113443.png)
+![](https://bluesun-1252625244.cos.ap-guangzhou.myqcloud.com/img/20200917113658.png)
 
 但这种模式，会受到服务端接口耗时，网络环境等因素影响到加载性能。   
 
