@@ -16,7 +16,7 @@ An extended cache library.
 
 一般的请求数据的形式是，页面加载的时候，从服务端获取数据，然后等待数据返回之后，进行页面渲染：
 
-![](https://img.yzcdn.cn/public_files/2019/03/01/8ef4fa605cae10f80dc5838de13bd508.png)
+![](https://bluesun-1252625244.cos.ap-guangzhou.myqcloud.com/img/20200917113443.png)
 
 但这种模式，会受到服务端接口耗时，网络环境等因素影响到加载性能。   
 
@@ -25,7 +25,7 @@ An extended cache library.
 
 Super Cache 提供了一个中间数据缓存的解决方案：
 
-![](https://img.yzcdn.cn/public_files/2019/03/01/271ade0bb4cadfad41a49acd4b268e29.png)
+![](https://bluesun-1252625244.cos.ap-guangzhou.myqcloud.com/img/20200917113443.png)
 
 Super Cache 的解决思路：    
 1. 当你需要获取一个数据的时候，如果有缓存，先把旧的数据给你。
