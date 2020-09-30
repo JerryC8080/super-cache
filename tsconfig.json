@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "target": "es2017",
+    "allowJs": true,
+    "target": "ES5",
     "outDir": "build/main",
     "rootDir": "src",
     "moduleResolution": "node",
@@ -37,11 +37,11 @@
     // "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
     // "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */,
 
-    "lib": ["es2017"],
+    "lib": ["es5", "es2016", "es2017", "dom"],
     "types": [],
     "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.js"],
   "exclude": ["node_modules/**"],
   "compileOnSave": false
 }
