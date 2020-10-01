@@ -1,13 +1,24 @@
 {
-  "name": "my-ts-project",
-  "version": "1.0.0",
-  "description": "My TS Project",
+  "name": "@jerryc/super-cache",
+  "version": "0.2.0",
+  "description": "An extended cache library.",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/JerryC8080/my-ts-project",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JerryC8080/super-cache.git"
+  },
+  "author": "JerryC (huangjerryc@gmail.com)",
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["cache"],
+  "bugs": {
+    "url": "https://github.com/JerryC8080/super-cache/issues"
+  },
+  "homepage": "https://github.com/JerryC8080/super-cache#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "run-p build:*",
     "build:main": "tsc -p tsconfig.json",

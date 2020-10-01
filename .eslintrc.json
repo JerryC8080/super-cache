@@ -14,7 +14,7 @@
     "prettier",
     "prettier/@typescript-eslint"
   ],
-  "globals": { "BigInt": true, "console": true, "WebAssembly": true },
+  "globals": { "console": true },
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "eslint-comments/disable-enable-pair": [
@@ -29,6 +29,10 @@
     "sort-imports": [
       "error",
       { "ignoreDeclarationSort": true, "ignoreCase": true }
-    ]
+    ],
+    "functional/no-let": ["error", { "allowLocalMutation": true }],
+    "functional/no-class": "off",
+    "functional/no-this-expression": "off",
+    "functional/immutable-data": "off"
   }
 }
