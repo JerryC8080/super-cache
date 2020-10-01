@@ -1,0 +1,781 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@jerryc/super-cache</title>
+	<meta name="description" content="Documentation for @jerryc/super-cache">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@jerryc/super-cache</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>@jerryc/super-cache</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#supercache" id="supercache" style="color: inherit; text-decoration: none;">
+					<h1>SuperCache</h1>
+				</a>
+				<p><a href="https://circleci.com/gh/JerryC8080/super-cache/tree/master"><img src="https://circleci.com/gh/JerryC8080/super-cache/tree/master.svg?style=svg" alt="CircleCI"></a></p>
+				<p><a href="https://www.npmjs.com/package/@jerryc/super-cache"><img src="https://img.shields.io/npm/v/@jerryc/super-cache.svg" alt="NPM Version"></a> <a href="https://www.npmjs.com/package/@jerryc/super-cache"><img src="https://img.shields.io/npm/dm/@jerryc/super-cache.svg" alt="NPM Downloads"></a> <a href="https://coveralls.io/github/JerryC8080/super-cache?branch=master"><img src="https://coveralls.io/repos/github/JerryC8080/super-cache/badge.svg?branch=master" alt="Coverage Status"></a> <img src="https://img.shields.io/bundlephobia/minzip/@jerryc/super-cache.svg" alt="npm bundle size"></p>
+				<p>An extended cache library.</p>
+				<a href="#feature" id="feature" style="color: inherit; text-decoration: none;">
+					<h1>Feature</h1>
+				</a>
+				<ol>
+					<li>提供一套「服务端接口耗时慢，但加载性能要求高」场景的解决方案</li>
+					<li>满足最基本的缓存需求，读取（get）和保存（set）</li>
+					<li>支持针对缓存进行逻辑代理</li>
+					<li>灵活可配置的数据存储方式</li>
+				</ol>
+				<a href="#how-it-work" id="how-it-work" style="color: inherit; text-decoration: none;">
+					<h1>How it work</h1>
+				</a>
+				<p>一般的请求数据的形式是，页面加载的时候，从服务端获取数据，然后等待数据返回之后，进行页面渲染：</p>
+				<p><img src="https://bluesun-1252625244.cos.ap-guangzhou.myqcloud.com/img/20200917113658.png" alt=""></p>
+				<p>但这种模式，会受到服务端接口耗时，网络环境等因素影响到加载性能。</p>
+				<p>对于加载性能要求高的页面（如首页），一般的 Web 开发我们有很多解决方案（如服务端渲染，服务端缓存，SSR 等）。<br>但是也有一些环境不能使用这种技术（如微信小程序）。</p>
+				<p>Super Cache 提供了一个中间数据缓存的解决方案：</p>
+				<p><img src="https://bluesun-1252625244.cos.ap-guangzhou.myqcloud.com/img/20200917113443.png" alt=""></p>
+				<p>Super Cache 的解决思路：</p>
+				<ol>
+					<li>当你需要获取一个数据的时候，如果有缓存，先把旧的数据给你。</li>
+					<li>然后再从服务端获取新的数据，刷新缓存。</li>
+					<li>如果一开始没有缓存，则请求服务端数据，再把数据返回。</li>
+					<li>下一次请求缓存，从第一步开始。</li>
+				</ol>
+				<p>这种解决方案，舍弃了一点数据的实时性（非第一次请求，只能获取上一次最新数据），大大提高了前端的加载性能。<br>适合的场景：</p>
+				<ol>
+					<li>数据实时性要求不高。</li>
+					<li>服务端接口耗时长。</li>
+				</ol>
+				<a href="#使用" id="使用" style="color: inherit; text-decoration: none;">
+					<h1>使用</h1>
+				</a>
+				<ol>
+					<li><p>安装</p>
+						<pre><code>$ <span class="hljs-built_in">npm</span> install @jerryc/<span class="hljs-built_in">super</span>-cache</code></pre>
+					</li>
+					<li><p>载入模块</p>
+						<pre><code class="language-javascript"><span class="hljs-keyword">import</span> SuperCache <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@brightwe/super-cache&#x27;</span>;
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> SuperCache();</code></pre>
+					</li>
+				</ol>
+				<a href="#基本操作" id="基本操作" style="color: inherit; text-decoration: none;">
+					<h1>基本操作</h1>
+				</a>
+				<ol>
+					<li><p>set 、 get、remove、removeAll</p>
+						<pre><code class="language-javascript">cache.set(<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;jc&#x27;</span>);
+cache.get(<span class="hljs-string">&#x27;name&#x27;</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-built_in">console</span>.log(value));
+cache.remove(<span class="hljs-string">&#x27;name&#x27;</span>);
+cache.removeAll();</code></pre>
+					</li>
+					<li><p>通过 adapter 定义缓存的数据如何获取</p>
+						<pre><code class="language-javascript"><span class="hljs-comment">// 支持异步返回，Promise</span>
+cache.addAdapter(<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>
+        .resolve()
+        .then(<span class="hljs-function">() =&gt;</span> API.request(<span class="hljs-string">&#x27;name&#x27;</span>))
+});
+
+<span class="hljs-comment">// 支持同步返回</span>
+cache.addAdapter(<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-function">() =&gt;</span> ({<span class="hljs-string">&#x27;jc&#x27;</span>}));</code></pre>
+					</li>
+				</ol>
+				<a href="#高级使用" id="高级使用" style="color: inherit; text-decoration: none;">
+					<h1>高级使用</h1>
+				</a>
+				<ol>
+					<li><p>适配器的高级配置</p>
+						<p>在 <code>new SuperCache()</code>、<code>addAdapter()</code> 与 <code>get()</code> 方法中，都支持对 adapter 进行配置：</p>
+						<pre><code class="language-javascript"><span class="hljs-keyword">const</span> adapterOptions = {
+
+    <span class="hljs-comment">// 是否忽略缓存，默认为 false。如果为 true，则 get() 每次都会请求 adapter 获取数据</span>
+    <span class="hljs-attr">ignoreCache</span>: <span class="hljs-literal">false</span>,
+
+    <span class="hljs-comment">// 是否更新缓存，默认为 true。如果为 false，则 get() 请求回来的数据，不会更新到缓存中</span>
+    <span class="hljs-attr">updateCache</span>: <span class="hljs-literal">true</span>,
+
+    <span class="hljs-comment">// get() 操作的回调钩子</span>
+    <span class="hljs-attr">beforeGet</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
+        <span class="hljs-comment">// ...</span>
+
+        <span class="hljs-comment">// 允许修改该次 get 操作的 adapterOptions，且支持异步的形式。</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve(newAdapterOptions);
+    },
+}
+
+<span class="hljs-comment">// 配置会作用于 cache 范围内的所有 adapter</span>
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> SuperCache({
+    adapterOptions,
+});
+
+</code></pre>
+					</li>
+				</ol>
+				<p>   // 配置会作用于该 adapter 范围内
+					cache.addAdapter(key, {
+					data: function() {...},
+					...adapterOptions,
+				});</p>
+				<p>   // 配置只会作用于该次 get 操作
+					cache.get(key, {
+					adapterOptions,
+				})</p>
+				<pre><code>
+adapterOptions 可以设置的值参考：
+
+<span class="hljs-number">2.</span> 自定义 storage
+
+storage 默认是存储到 memory，但在生产环境中是不科学的做法，你可以自定义数据的存储
+
+```javascript
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> SuperCache({
+  storage: {
+    <span class="hljs-keyword">get</span>(key) {
+      <span class="hljs-comment">// this 指针等于当前 cache 实例</span>
+
+      <span class="hljs-comment">// 自定义数据的获取</span>
+      <span class="hljs-keyword">const</span> <span class="hljs-keyword">value</span> = seltStorage.<span class="hljs-keyword">get</span>(key);
+
+      <span class="hljs-comment">// 然后返回结果，支持 Promise 和非 Promise</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">value</span>;
+    },
+    <span class="hljs-keyword">set</span>(key, <span class="hljs-keyword">value</span>) {
+      <span class="hljs-comment">// this 指针等于当前 cache 实例</span>
+
+      <span class="hljs-comment">// 自定义数据的存储</span>
+      selfStorage.<span class="hljs-keyword">set</span>(key, <span class="hljs-keyword">value</span>);
+
+      <span class="hljs-comment">// 然后返回结果，支持 Promise 和非 Promise</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">value</span>;
+    },
+    <span class="hljs-keyword">remove</span>(key) {
+      <span class="hljs-comment">// this 指针等于当前 cache 实例</span>
+
+      <span class="hljs-keyword">return</span> selfStorage.<span class="hljs-keyword">remove</span>(key);
+    },
+    removeAll() {
+      <span class="hljs-comment">// this 指针等于当前 cache 实例</span>
+
+      <span class="hljs-keyword">return</span> selfStorage.removeAll();
+    },
+
+    <span class="hljs-comment">// 设置缓存 key 的前缀，最终会成为：super-cache:${key}</span>
+    keyPrefix: <span class="hljs-string">&#x27;super-cache&#x27;</span>,
+  },
+});</code></pre>
+				<ol start="3">
+					<li><p>自定义的配置</p>
+						<p>SuperCache 的实例和 adapter 都支持配置自定义的配置信息：</p>
+						<pre><code class="language-javascript"><span class="hljs-comment">// 给 SuperCache 实例配置自定义配置</span>
+<span class="hljs-keyword">const</span> customOptions = {
+    <span class="hljs-attr">ttl</span>: <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>,
+}
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> SuperCache({
+    <span class="hljs-attr">extra</span>: customOptions,
+});
+
+<span class="hljs-comment">// true</span>
+cache.extra === customOptions;
+
+</code></pre>
+					</li>
+				</ol>
+				<p>   // 给 adapter 配置自定义配置
+					cache.addAdapter(&#39;name&#39;, {
+					extra: customOptions,
+					data() {...},
+				});</p>
+				<p>   // true
+				cache.getAddapter(&#39;name&#39;).extra === customOptions;</p>
+				<pre><code>
+<span class="hljs-number">4</span>. 额外的配置信息
+
+`<span class="hljs-type">SuperCache</span>()` 和 `cacheInstance.addAdapter()` 都支持配置额外的自定义字段：
+
+```javascript
+<span class="hljs-keyword">const</span> cache = new <span class="hljs-type">SuperCache</span>({
+    extra: { name: &#x27;jc&#x27; },
+});
+
+// { name: &#x27;jc&#x27; }
+cache.extra;
+
+cache.addAdapter(&#x27;name&#x27;, {
+    extra: { name: &#x27;david&#x27; },
+    data() <span class="hljs-meta">{...}</span>,
+});
+
+// { name: &#x27;david&#x27; }
+cache.getAdapter(&#x27;name&#x27;).extra;</code></pre>
+				<p>   利用这种特性，我们可以满足 storage 中针对不同的 adapter 进行不同的缓存策略：</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> SuperCache({
+    <span class="hljs-attr">extra</span>: {
+        <span class="hljs-comment">// 默认缓存时间是 60s</span>
+        <span class="hljs-attr">ttl</span>: <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>,
+    },
+    <span class="hljs-attr">storage</span>: {
+        get(key) {...},
+        set(key, value) {
+            <span class="hljs-comment">// 获取自定义配置信息</span>
+            <span class="hljs-keyword">const</span> adapterTTL = <span class="hljs-built_in">this</span>.getAdapter(key).extra.ttl;
+            <span class="hljs-keyword">const</span> ttl = <span class="hljs-built_in">this</span>.extra.ttl;
+
+            <span class="hljs-comment">// 调用自定义的存储库</span>
+            myStorage.save(key, { <span class="hljs-attr">ttl</span>: ttl || adapterTTL });
+        },
+        remove(key) {...},
+        removeAll() {...},
+    },
+});
+
+cache.addAdapter(<span class="hljs-string">&#x27;name&#x27;</span>, {
+    <span class="hljs-attr">extra</span>: {
+        <span class="hljs-comment">// 针对于 name 的缓存，只做 30s 时间缓存</span>
+        <span class="hljs-attr">ttl</span>: <span class="hljs-number">30</span> * <span class="hljs-number">1000</span>,
+    },
+    data() {...},
+});</code></pre>
+				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+					<h1>API</h1>
+				</a>
+				<a href="#supercache-1" id="supercache-1" style="color: inherit; text-decoration: none;">
+					<h2>SuperCache</h2>
+				</a>
+				<p>Class SuperCache.</p>
+				<p><strong>Kind</strong>: global class</p>
+				<ul>
+					<li><a href="#SuperCache">SuperCache</a><ul>
+							<li><a href="#new_SuperCache_new">new SuperCache(options)</a></li>
+							<li><a href="#SuperCache+get">.get(key)</a> ⇒ <code>Promise</code></li>
+							<li><a href="#SuperCache+set">.set(key, value)</a></li>
+							<li><a href="#SuperCache+remove">.remove(key, value)</a></li>
+							<li><a href="#SuperCache+getAdapter">.getAdapter(key)</a> ⇒ <code>object</code></li>
+							<li><a href="#SuperCache+getAdapterValue">.getAdapterValue(key)</a> ⇒ <code>Promise</code></li>
+							<li><a href="#SuperCache+getAndUpdateAdapterValue">.getAndUpdateAdapterValue(key)</a> ⇒ <code>Promise</code></li>
+							<li><a href="#SuperCache+addAdapter">.addAdapter(key, adapter)</a></li>
+						</ul>
+					</li>
+				</ul>
+				<p><a name="new_SuperCache_new"></a></p>
+				<a href="#new-supercacheoptions" id="new-supercacheoptions" style="color: inherit; text-decoration: none;">
+					<h3>new SuperCache(options)</h3>
+				</a>
+				<p>Create an instance of SuperCache</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>options</td>
+							<td><code>object</code></td>
+							<td>配置信息</td>
+						</tr>
+						<tr>
+							<td>[options.storage]</td>
+							<td><code>object</code></td>
+							<td>自定义数据存储器</td>
+						</tr>
+						<tr>
+							<td>options.storage.set</td>
+							<td><a href="#storageSet"><code>storageSet</code></a></td>
+							<td>数据保存</td>
+						</tr>
+						<tr>
+							<td>options.storage.get</td>
+							<td><a href="#storageGet"><code>storageGet</code></a></td>
+							<td>数据获取</td>
+						</tr>
+						<tr>
+							<td>[options.storage.remove]</td>
+							<td><a href="#storageRemove"><code>storageRemove</code></a></td>
+							<td>数据删除</td>
+						</tr>
+						<tr>
+							<td>[options.storage.removeAll]</td>
+							<td><a href="#storageRemoveAll"><code>storageRemoveAll</code></a></td>
+							<td>删除所有数据</td>
+						</tr>
+						<tr>
+							<td>[options.storage.keyPrefix]</td>
+							<td><code>string</code></td>
+							<td>数据库缓存 key 的前缀，默认：&#39;super-cache&#39;</td>
+						</tr>
+						<tr>
+							<td>[options.adapterOptions]</td>
+							<td><code>AdapterOptions</code></td>
+							<td>adapter 的全局配置</td>
+						</tr>
+						<tr>
+							<td>[options.extra]</td>
+							<td><code>*</code></td>
+							<td>额外的配置信息，可以通过 this.extra 获得</td>
+						</tr>
+						<tr>
+							<td>[options.log]</td>
+							<td><code>object</code></td>
+							<td>允许改变内部的 log 库</td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+get"></a></p>
+				<a href="#supercachegetkey-⇒-promise" id="supercachegetkey-⇒-promise" style="color: inherit; text-decoration: none;">
+					<h3>superCache.get(key) ⇒ <code>Promise</code></h3>
+				</a>
+				<p>Get value</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a>
+				<strong>Returns</strong>: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+						<tr>
+							<td>[options.adapterOptions]</td>
+							<td><code>AdapterOptions</code></td>
+							<td>adapter 配置</td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+set"></a></p>
+				<a href="#supercachesetkey-value" id="supercachesetkey-value" style="color: inherit; text-decoration: none;">
+					<h3>superCache.set(key, value)</h3>
+				</a>
+				<p>Set value</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a></p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+						<tr>
+							<td>value</td>
+							<td><code>*</code></td>
+							<td>storage.remove 的返回结果</td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+remove"></a></p>
+				<a href="#supercacheremovekey-value" id="supercacheremovekey-value" style="color: inherit; text-decoration: none;">
+					<h3>superCache.remove(key, value)</h3>
+				</a>
+				<p>Remove value</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a></p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要删除数据的 key</td>
+						</tr>
+						<tr>
+							<td>value</td>
+							<td><code>*</code></td>
+							<td>storage.remove 的返回结果</td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+getAdapter"></a></p>
+				<a href="#supercachegetadapterkey-⇒-object" id="supercachegetadapterkey-⇒-object" style="color: inherit; text-decoration: none;">
+					<h3>superCache.getAdapter(key) ⇒ <code>object</code></h3>
+				</a>
+				<p>Get adapter by key</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a>
+				<strong>Returns</strong>: <code>object</code> - 返回 adapter 对象</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+getAdapterValue"></a></p>
+				<a href="#supercachegetadaptervaluekey-⇒-promise" id="supercachegetadaptervaluekey-⇒-promise" style="color: inherit; text-decoration: none;">
+					<h3>superCache.getAdapterValue(key) ⇒ <code>Promise</code></h3>
+				</a>
+				<p>Get value by adapter</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a>
+				<strong>Returns</strong>: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+getAndUpdateAdapterValue"></a></p>
+				<a href="#supercachegetandupdateadaptervaluekey-⇒-promise" id="supercachegetandupdateadaptervaluekey-⇒-promise" style="color: inherit; text-decoration: none;">
+					<h3>superCache.getAndUpdateAdapterValue(key) ⇒ <code>Promise</code></h3>
+				</a>
+				<p>Get and Update value by adapter</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a>
+				<strong>Returns</strong>: <code>Promise</code> - 返回一个 Promise 对象，该对象返回需要获取的数据</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+				</tbody></table>
+				<p><a name="SuperCache+addAdapter"></a></p>
+				<a href="#supercacheaddadapterkey-adapter" id="supercacheaddadapterkey-adapter" style="color: inherit; text-decoration: none;">
+					<h3>superCache.addAdapter(key, adapter)</h3>
+				</a>
+				<p>Add adapter</p>
+				<p><strong>Kind</strong>: instance method of <a href="#SuperCache"><code>SuperCache</code></a></p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>adapter</td>
+							<td><code>object</code> | <code>function</code></td>
+							<td>如果是 object，参数看下面，如果是 function，则会变成 adapter.data = adapter</td>
+						</tr>
+						<tr>
+							<td>adapter.data</td>
+							<td><a href="#adapterDataFunction"><code>adapterDataFunction</code></a></td>
+							<td>在调用 adapter，通过该函数来获取数据</td>
+						</tr>
+						<tr>
+							<td>[adapter.options]</td>
+							<td><code>AdapterOptions</code></td>
+							<td>adapter 配置</td>
+						</tr>
+						<tr>
+							<td>[options.extra]</td>
+							<td><code>*</code></td>
+							<td>额外的配置信息，供外部灵活配置，可以通过 this.getAdapters(key).extra 获得 *</td>
+						</tr>
+				</tbody></table>
+				<p><a name="adapterDefaultOptions"></a></p>
+				<a href="#adapterdefaultoptions" id="adapterdefaultoptions" style="color: inherit; text-decoration: none;">
+					<h2>adapterDefaultOptions</h2>
+				</a>
+				<p>Adapter Default Options</p>
+				<p><strong>Kind</strong>: global constant
+					<strong>Typeof</strong>: <code>Object</code> AdapterOptions
+				<strong>Properties</strong></p>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Type</th>
+							<th>Default</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>[ignoreCache]</td>
+							<td><code>boolean</code></td>
+							<td><code>false</code></td>
+							<td>是否忽略缓存</td>
+						</tr>
+						<tr>
+							<td>[updateCache]</td>
+							<td><code>boolean</code></td>
+							<td><code>true</code></td>
+							<td>是否在数据返回之后更新缓存</td>
+						</tr>
+						<tr>
+							<td>[beforeGet]</td>
+							<td><a href="#optionsBeforeGet"><code>optionsBeforeGet</code></a></td>
+							<td><code>undefinded</code></td>
+							<td>在调用 adapter 获取数据之前的钩子方法</td>
+						</tr>
+				</tbody></table>
+				<p><a name="storageSet"></a></p>
+				<a href="#storageset--function" id="storageset--function" style="color: inherit; text-decoration: none;">
+					<h2>storageSet : <code>function</code></h2>
+				</a>
+				<p><strong>Kind</strong>: global typedef</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+						<tr>
+							<td>data</td>
+							<td><code>*</code></td>
+							<td>storage.get 的返回值</td>
+						</tr>
+				</tbody></table>
+				<p><a name="storageRemove"></a></p>
+				<a href="#storageremove--function" id="storageremove--function" style="color: inherit; text-decoration: none;">
+					<h2>storageRemove : <code>function</code></h2>
+				</a>
+				<p><strong>Kind</strong>: global typedef</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+						<tr>
+							<td>data</td>
+							<td><code>*</code></td>
+							<td>storage.remove 的返回值</td>
+						</tr>
+				</tbody></table>
+				<p><a name="storageRemoveAll"></a></p>
+				<a href="#storageremoveall--function" id="storageremoveall--function" style="color: inherit; text-decoration: none;">
+					<h2>storageRemoveAll : <code>function</code></h2>
+				</a>
+				<p><strong>Kind</strong>: global typedef</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>data</td>
+							<td><code>*</code></td>
+							<td>storage.removeAll 的返回值</td>
+						</tr>
+				</tbody></table>
+				<p><a name="storageGet"></a></p>
+				<a href="#storageget-⇒-promise--" id="storageget-⇒-promise--" style="color: inherit; text-decoration: none;">
+					<h2>storageGet ⇒ <code>Promise</code> | <code>*</code></h2>
+				</a>
+				<p><strong>Kind</strong>: global typedef
+				<strong>Returns</strong>: <code>Promise</code> | <code>*</code> - 如果返回非 Promise，内部会转化为 Promise</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>key</td>
+							<td><code>string</code></td>
+							<td>需要获取数据的 key</td>
+						</tr>
+				</tbody></table>
+				<p><a name="optionsBeforeGet"></a></p>
+				<a href="#optionsbeforeget-⇒-object" id="optionsbeforeget-⇒-object" style="color: inherit; text-decoration: none;">
+					<h2>optionsBeforeGet ⇒ <code>object</code></h2>
+				</a>
+				<p>beforeGet callback</p>
+				<p><strong>Kind</strong>: global typedef
+				<strong>Returns</strong>: <code>object</code> - runtimeOpt 运行时的配置信息，会暂时覆盖实例的配置</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Param</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>cache</td>
+							<td><code>*</code></td>
+							<td>存储在 storage 的缓存数据，如果没有则为 undefined</td>
+						</tr>
+				</tbody></table>
+				<p><a name="adapterDataFunction"></a></p>
+				<a href="#adapterdatafunction-⇒-promise" id="adapterdatafunction-⇒-promise" style="color: inherit; text-decoration: none;">
+					<h2>adapterDataFunction ⇒ <code>Promise</code></h2>
+				</a>
+				<p>data callback</p>
+				<p><strong>Kind</strong>: global typedef
+				<strong>Returns</strong>: <code>Promise</code> - 需要返回一个 Promise 对象，该对象返回需要存储的数据</p>
+				<a href="#constants" id="constants" style="color: inherit; text-decoration: none;">
+					<h2>Constants</h2>
+				</a>
+				<dl>
+					<dt><a href="#adapterDefaultOptions">adapterDefaultOptions</a></dt>
+					<dd><p>Adapter Default Options</p>
+					</dd>
+				</dl>
+				<a href="#typedefs" id="typedefs" style="color: inherit; text-decoration: none;">
+					<h2>Typedefs</h2>
+				</a>
+				<dl>
+					<dt><a href="#storageSet">storageSet</a> : <code>function</code></dt>
+					<dd></dd>
+					<dt><a href="#storageRemove">storageRemove</a> : <code>function</code></dt>
+					<dd></dd>
+					<dt><a href="#storageRemoveAll">storageRemoveAll</a> : <code>function</code></dt>
+					<dd></dd>
+					<dt><a href="#storageGet">storageGet</a> ⇒ <code>Promise</code> | <code>*</code></dt>
+					<dd></dd>
+					<dt><a href="#optionsBeforeGet">optionsBeforeGet</a> ⇒ <code>object</code></dt>
+					<dd><p>beforeGet callback</p>
+					</dd>
+					<dt><a href="#adapterDataFunction">adapterDataFunction</a> ⇒ <code>Promise</code></dt>
+					<dd><p>data callback</p>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/supercache.html" class="tsd-kind-icon">Super<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#addlog" class="tsd-kind-icon">add<wbr>Log</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#initstorage" class="tsd-kind-icon">init<wbr>Storage</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#adapterdefaultoptions" class="tsd-kind-icon">adapter<wbr>Default<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#innerlog" class="tsd-kind-icon">inner<wbr>Log</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
