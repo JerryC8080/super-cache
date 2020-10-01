@@ -14,12 +14,12 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-.
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v1-dependencies-.
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run: npm install
-      - run: npm run build-pro
+      - run: npm run build
 
       - save_cache:
           paths:
@@ -35,12 +35,12 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: 
+      - run:
           name: Test And Report
           command: |
-              npm i tap-xunit ava --save-dev
-              mkdir -p ./reports
-              ./node_modules/.bin/ava --tap | ./node_modules/.bin/tap-xunit > ./reports/ava.xml
+            npm i tap-xunit ava --save-dev
+            mkdir -p ./reports
+            ./node_modules/.bin/ava --tap | ./node_modules/.bin/tap-xunit > ./reports/ava.xml
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -53,12 +53,12 @@ jobs:
           at: ~/repo
       - run:
           name: Test Coverage
-          command: npm run test:coverage
+          command: npm run cov
       - run:
           name: Report for coveralls
           command: |
-              npm install coveralls --save-dev
-              ./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls
+            npm install coveralls --save-dev
+            ./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls
       - store_artifacts:
           path: coverage
 
@@ -67,7 +67,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: ./node_modules/.bin/eslint ./src 
+      - run: ./node_modules/.bin/eslint ./src
 
   deploy:
     <<: *defaults
@@ -80,6 +80,15 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
+
+  gh-pages:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Publish to gh-pages
+          command: npm run doc:publish
 
 workflows:
   build-test-and-deploy:
@@ -104,3 +113,6 @@ workflows:
               only: /^v.*/
             branches:
               only: master
+      - gh-pages:
+          requires:
+            - build

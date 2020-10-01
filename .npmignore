@@ -1,9 +1,12 @@
-out
 src
-test
-.babelrc
 .gitignore
 yarn.lock
 .circleci
 .nyc_output
-.eslintrc
+.eslintrc.json
+.editorconfig
+.prettierignore
+tsconfig.json
+tsconfig.module.json
+.vscode
+.github
