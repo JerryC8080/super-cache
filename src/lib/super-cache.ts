@@ -40,6 +40,22 @@ import innerLog from './inner-log';
  * @returns {Promise} 需要返回一个 Promise 对象，该对象返回需要存储的数据
  */
 
+export interface Storage {
+  set: (key: string, value: any) => any;
+  get: (key: string) => any;
+  remove: (key: string) => any;
+  removeAll: (key: string) => any;
+  keyPrefix?: string;
+}
+
+export type Log = typeof innerLog;
+
+export interface AdapterOptions {
+  ignoreCache?: boolean;
+  updateCache?: boolean;
+  beforeGet?: (cacheValue: any) => Promise<any>;
+}
+
 /**
  * Adapter Default Options
  * @typeof {Object} AdapterOptions
@@ -96,24 +112,39 @@ function initStorage(ins, storage) {
   else ins.removeAll = () => storage.removeAll.call(ins);
 }
 
-/** Class SuperCache. */
-class SuperCache {
+export class SuperCache {
+  public extra;
+  private adapters;
+  private log;
+  private adapterGlobalOptions;
+  private setData;
+  private removeData;
+  private getData;
+
   /**
-     * Create an instance of SuperCache
-     * @param {object} options 配置信息
-     * @param {object} [options.storage] 自定义数据存储器
-     * @param {storageSet} options.storage.set 数据保存
-     * @param {storageGet} options.storage.get 数据获取
-     * @param {storageRemove} [options.storage.remove] 数据删除
-     * @param {storageRemoveAll} [options.storage.removeAll] 删除所有数据
-     * @param {string} [options.storage.keyPrefix] 数据库缓存 key 的前缀，默认：'super-cache'
-     * @param {AdapterOptions} [options.adapterOptions] - adapter 的全局配置
-     * @param {*} [options.extra] 额外的配置信息，可以通过 this.extra 获得
-     
-     * @param {object} [options.log] 允许改变内部的 log 库
-     *
-     */
-  constructor({ adapterOptions, storage, log = innerLog, extra } = {}) {
+   * Create an instance of SuperCache
+   * @param {object} options 配置信息
+   * @param {object} [options.storage] 自定义数据存储器
+   * @param {storageSet} options.storage.set 数据保存
+   * @param {storageGet} options.storage.get 数据获取
+   * @param {storageRemove} [options.storage.remove] 数据删除
+   * @param {storageRemoveAll} [options.storage.removeAll] 删除所有数据
+   * @param {string} [options.storage.keyPrefix] 数据库缓存 key 的前缀，默认：'super-cache'
+   * @param {AdapterOptions} [options.adapterOptions] - adapter 的全局配置
+   * @param {*} [options.extra] 额外的配置信息，可以通过 this.extra 获得
+   * @param {object} [options.log] 允许改变内部的 log 库
+   */
+  constructor({
+    adapterOptions,
+    storage,
+    log = innerLog,
+    extra,
+  }: {
+    adapterOptions?: AdapterOptions;
+    storage?: Storage;
+    log?: Log;
+    extra?: any;
+  } = {}) {
     this.adapters = {};
 
     initStorage(this, storage);
@@ -134,8 +165,8 @@ class SuperCache {
    * @param {AdapterOptions} [options.adapterOptions] - adapter 配置
    * @returns {Promise}  返回一个 Promise 对象，该对象返回需要获取的数据
    */
-  get(key, options = {}) {
-    const domain = {};
+  get(key, options: any = {}) {
+    const domain: any = {};
     return (
       Promise.resolve()
 
@@ -176,6 +207,8 @@ class SuperCache {
                 })
             );
           }
+
+          return Promise.resolve();
         })
 
         // 获取数据

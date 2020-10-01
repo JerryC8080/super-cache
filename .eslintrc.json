@@ -33,6 +33,10 @@
     "functional/no-let": ["error", { "allowLocalMutation": true }],
     "functional/no-class": "off",
     "functional/no-this-expression": "off",
-    "functional/immutable-data": "off"
+    "functional/immutable-data": "off",
+    "functional/prefer-type-literal": "off",
+    "functional/no-mixed-type": "off",
+    "functional/prefer-readonly-type": "off",
+    "functional/no-throw-statement": "off"
   }
 }

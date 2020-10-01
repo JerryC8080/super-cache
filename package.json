@@ -11,7 +11,9 @@
   },
   "author": "JerryC (huangjerryc@gmail.com)",
   "license": "MIT",
-  "keywords": ["cache"],
+  "keywords": [
+    "cache"
+  ],
   "bugs": {
     "url": "https://github.com/JerryC8080/super-cache/issues"
   },
