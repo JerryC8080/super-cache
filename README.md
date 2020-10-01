@@ -52,7 +52,7 @@ Super Cache 的解决思路：
 2. 载入模块
 
    ```javascript
-   import SuperCache from '@brightwe/super-cache';
+   import SuperCache from '@jerryc/super-cache';
    const cache = new SuperCache();
    ```
 
